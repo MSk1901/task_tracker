@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from src.tasks.models import StatusEnum
 
@@ -12,10 +12,21 @@ class TaskAddSchema(BaseModel):
     deadline: datetime
     parent_task_id: int | None = None
 
+    class Config:
+        json_encoders = {
+            datetime: lambda dt: dt.isoformat()
+        }
+        use_enum_values = True
+
 
 class TaskSchema(TaskAddSchema):
     id: int
     status: StatusEnum
+    created_at: datetime
+    updated_at: datetime | None
+
+    class Config:
+        from_attributes = True
 
 
 class TaskUpdateSchema(TaskAddSchema):
