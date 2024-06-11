@@ -6,8 +6,9 @@ from src.auth.models import User
 from src.dependencies import current_user
 from src.employees import service
 from src.employees.dependencies import valid_employee_id, authorized_user
-from src.employees.schemas import SEmployee, SEmployeeNotFound, SEmployeeAdd, SEmployeeUpdate, SEmployeeAlreadyExists
-from src.schemas import SEmployeeTasks
+from src.employees.schemas import EmployeeSchema, EmployeeNotFoundSchema, EmployeeAlreadyExistsSchema, \
+    EmployeeAddSchema, EmployeeUpdateSchema
+from src.schemas import EmployeeTasksSchema
 
 router = APIRouter(
     prefix='/employees',
@@ -17,7 +18,7 @@ router = APIRouter(
 
 @router.get(
     '',
-    response_model=list[SEmployee]
+    response_model=list[EmployeeSchema]
 )
 async def get_all_employees():
     employees = await service.get_all_employees()
@@ -26,7 +27,7 @@ async def get_all_employees():
 
 @router.get(
     '/busy',
-    response_model=list[SEmployeeTasks]
+    response_model=list[EmployeeTasksSchema]
 )
 async def get_busy_employees():
     employees = await service.get_busy_employees()
@@ -35,10 +36,10 @@ async def get_busy_employees():
 
 @router.get(
     '/{employee_id}',
-    response_model=SEmployee,
+    response_model=EmployeeSchema,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            'model': SEmployeeNotFound,
+            'model': EmployeeNotFoundSchema,
             'description': "Employee not found"
         }
     }
@@ -49,31 +50,31 @@ async def get_employee(employee: Mapping = Depends(valid_employee_id)):
 
 @router.post(
     '',
-    response_model=SEmployee,
+    response_model=EmployeeSchema,
     status_code=status.HTTP_201_CREATED,
     responses={
         status.HTTP_400_BAD_REQUEST: {
-            'model': SEmployeeAlreadyExists,
+            'model': EmployeeAlreadyExistsSchema,
             'description': "Employee already exists"
         }
     }
 )
-async def add_employee(employee: SEmployeeAdd, user: User = Depends(current_user)):
+async def add_employee(employee: EmployeeAddSchema, user: User = Depends(current_user)):
     result = await service.add_employee(employee, user)
     return result
 
 
 @router.patch(
     '/{employee_id}',
-    response_model=SEmployee,
+    response_model=EmployeeSchema,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            'model': SEmployeeNotFound,
+            'model': EmployeeNotFoundSchema,
             'description': "Employee not found"
         }
     }
 )
-async def update_employee(update_data: SEmployeeUpdate, employee: Mapping = Depends(authorized_user)):
+async def update_employee(update_data: EmployeeUpdateSchema, employee: Mapping = Depends(authorized_user)):
     result = await service.update_employee(employee, update_data)
     return result
 
@@ -83,7 +84,7 @@ async def update_employee(update_data: SEmployeeUpdate, employee: Mapping = Depe
     status_code=status.HTTP_204_NO_CONTENT,
     responses={
         status.HTTP_404_NOT_FOUND: {
-            'model': SEmployeeNotFound,
+            'model': EmployeeNotFoundSchema,
             'description': "Employee not found"
         }
     }

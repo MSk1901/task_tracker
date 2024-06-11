@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from src.tasks.models import StatusEnum
 
 
-class STaskAdd(BaseModel):
+class TaskAddSchema(BaseModel):
     title: str = Field(max_length=100)
     description: str
     employee_id: int | None = None
@@ -13,19 +13,19 @@ class STaskAdd(BaseModel):
     parent_task_id: int | None = None
 
 
-class STask(STaskAdd):
+class TaskSchema(TaskAddSchema):
     id: int
     status: StatusEnum
 
 
-class STaskUpdate(STaskAdd):
+class TaskUpdateSchema(TaskAddSchema):
     title: str | None = Field(max_length=100, default=None)
     description: str | None = None
     status: StatusEnum | None = None
     deadline: datetime | None = None
 
 
-class STaskNotFound(BaseModel):
+class TaskNotFoundSchema(BaseModel):
     class Config:
         json_schema_extra = {
             'example':

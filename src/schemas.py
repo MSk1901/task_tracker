@@ -1,10 +1,10 @@
-from src.employees.schemas import SEmployee, SEmployeeName
-from src.tasks.schemas import STask
+from src.employees.schemas import EmployeeSchema, EmployeeNameSchema
+from src.tasks.schemas import TaskSchema
 
 
-class SEmployeeTasks(SEmployee):
-    tasks: list[STask]
+class EmployeeTasksSchema(EmployeeSchema):
+    tasks: list[TaskSchema]
 
 
-class SImportantTask(STask):
-    employee: SEmployeeName
+class ImportantTaskSchema(TaskSchema):
+    employee: EmployeeNameSchema

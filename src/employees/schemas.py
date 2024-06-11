@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from pydantic import BaseModel, Field, field_validator
 
 
-class SEmployeeAdd(BaseModel):
+class EmployeeAddSchema(BaseModel):
     first_name: str = Field(max_length=50)
     last_name: str = Field(max_length=50)
     fathers_name: str | None = Field(max_length=50, default=None)
@@ -20,25 +20,25 @@ class SEmployeeAdd(BaseModel):
         return v
 
 
-class SEmployee(SEmployeeAdd):
+class EmployeeSchema(EmployeeAddSchema):
     id: int
     user_id: uuid.UUID
 
 
-class SEmployeeUpdate(SEmployeeAdd):
+class EmployeeUpdateSchema(EmployeeAddSchema):
     first_name: str | None = Field(max_length=50, default=None)
     last_name: str | None = Field(max_length=50, default=None)
     dob: date | None = None
     position: str | None = Field(max_length=100, default=None)
 
 
-class SEmployeeName(BaseModel):
+class EmployeeNameSchema(BaseModel):
     first_name: str = Field(max_length=50)
     last_name: str = Field(max_length=50)
     fathers_name: str | None = Field(max_length=50, default=None)
 
 
-class SEmployeeNotFound(BaseModel):
+class EmployeeNotFoundSchema(BaseModel):
     class Config:
         json_schema_extra = {
             'example':
@@ -48,7 +48,7 @@ class SEmployeeNotFound(BaseModel):
         }
 
 
-class SEmployeeAlreadyExists(BaseModel):
+class EmployeeAlreadyExistsSchema(BaseModel):
     class Config:
         json_schema_extra = {
             'example':
