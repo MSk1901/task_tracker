@@ -2,6 +2,7 @@ from typing import Mapping
 
 from fastapi import APIRouter, Depends, status
 
+from src.dependencies import current_user
 from src.employees.service import get_important_tasks_and_employees
 from src.schemas import ImportantTaskSchema
 from src.tasks import service
@@ -51,7 +52,8 @@ async def get_task(task: Mapping = Depends(valid_task_id)):
     response_model=TaskSchema,
     status_code=status.HTTP_201_CREATED,
 )
-async def add_task(task: TaskAddSchema):
+async def add_task(task: TaskAddSchema,
+                   user=Depends(current_user)):
     result = await service.add_task(task)
     return result
 
@@ -66,7 +68,9 @@ async def add_task(task: TaskAddSchema):
         }
     }
 )
-async def update_task(update_data: TaskUpdateSchema, task: Mapping = Depends(valid_task_id)):
+async def update_task(update_data: TaskUpdateSchema,
+                      task: Mapping = Depends(valid_task_id),
+                      user=Depends(current_user)):
     result = await service.update_task(task, update_data)
     return result
 
@@ -81,7 +85,6 @@ async def update_task(update_data: TaskUpdateSchema, task: Mapping = Depends(val
         }
     }
 )
-async def delete_task(task: Mapping = Depends(valid_task_id)):
+async def delete_task(task: Mapping = Depends(valid_task_id),
+                      user=Depends(current_user)):
     await service.delete_task(task)
-
-
