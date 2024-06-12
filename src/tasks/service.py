@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.orm import aliased
 
