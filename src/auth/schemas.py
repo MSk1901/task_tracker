@@ -8,7 +8,7 @@ class UserRead(schemas.BaseUser[uuid.UUID]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    class Config:
+    class ConfigDict:
         json_schema_extra = {'example': {
             'email': 'user e-mail',
             'password': 'user password'

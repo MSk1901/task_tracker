@@ -39,7 +39,7 @@ class EmployeeNameSchema(BaseModel):
 
 
 class EmployeeNotFoundSchema(BaseModel):
-    class Config:
+    class ConfigDict:
         json_schema_extra = {
             'example':
                 {
@@ -49,7 +49,7 @@ class EmployeeNotFoundSchema(BaseModel):
 
 
 class EmployeeAlreadyExistsSchema(BaseModel):
-    class Config:
+    class ConfigDict:
         json_schema_extra = {
             'example':
                 {

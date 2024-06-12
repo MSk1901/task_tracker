@@ -18,7 +18,7 @@ class TaskAddSchema(BaseModel):
             raise ValueError('deadline must be an aware datetime with timezone info')
         return v
 
-    class Config:
+    class ConfigDict:
         json_encoders = {
             datetime: lambda dt: dt.isoformat()
         }
@@ -31,7 +31,7 @@ class TaskSchema(TaskAddSchema):
     created_at: datetime
     updated_at: datetime | None
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
@@ -43,7 +43,7 @@ class TaskUpdateSchema(TaskAddSchema):
 
 
 class TaskNotFoundSchema(BaseModel):
-    class Config:
+    class ConfigDict:
         json_schema_extra = {
             'example':
                 {
