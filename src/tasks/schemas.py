@@ -12,6 +12,12 @@ class TaskAddSchema(BaseModel):
     deadline: datetime
     parent_task_id: int | None = None
 
+    @field_validator('deadline')
+    def check_deadline_is_aware(cls, v):
+        if v.tzinfo is None or v.tzinfo.utcoffset(v) is None:
+            raise ValueError('deadline must be an aware datetime with timezone info')
+        return v
+
     class Config:
         json_encoders = {
             datetime: lambda dt: dt.isoformat()
