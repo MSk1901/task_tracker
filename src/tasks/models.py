@@ -16,6 +16,7 @@ class StatusEnum(enum.Enum):
 
 
 class Task(Base):
+    """ORM модель задачи"""
     __tablename__ = 'task'
 
     id = mapped_column(Integer, primary_key=True)

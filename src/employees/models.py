@@ -9,6 +9,7 @@ from src.database import Base
 
 
 class Employee(Base):
+    """ORM модель сотрудника"""
     __tablename__ = 'employee'
 
     id = mapped_column(Integer, primary_key=True)

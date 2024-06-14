@@ -9,11 +9,17 @@ from src.tasks.schemas import TaskAddSchema, TaskUpdateSchema
 
 
 async def get_all_tasks(session: AsyncSession):
+    """ORM запрос на получение всех задач"""
+
     tasks = await session.scalars(select(Task))
     return tasks
 
 
 async def get_important_tasks(session: AsyncSession):
+    """
+    ORM запрос на получение задач не взятых в работу,
+    и от которых зависят другие задачи, взятые в работу
+    """
     important_tasks = aliased(Task)
     dependent_tasks = aliased(Task)
 
@@ -29,12 +35,16 @@ async def get_important_tasks(session: AsyncSession):
 
 async def get_task_by_id(task_id: int,
                          session: AsyncSession):
+    """ORM запрос на получение задачи по id"""
+
     task = await session.get(Task, task_id)
     return task
 
 
 async def add_task(task: TaskAddSchema,
                    session: AsyncSession):
+    """ORM запрос на добавление задачи"""
+
     task_dict = task.model_dump(exclude_unset=True)
 
     parent_task_id = task_dict.get('parent_task_id')
@@ -63,6 +73,8 @@ async def add_task(task: TaskAddSchema,
 async def update_task(task: Task,
                       update_data: TaskUpdateSchema,
                       session: AsyncSession):
+    """ORM запрос на обновление задачи"""
+
     update_dict = update_data.model_dump(exclude_unset=True)
 
     parent_task_id = update_dict.get('parent_task_id')
@@ -91,6 +103,8 @@ async def update_task(task: Task,
 
 
 async def delete_task(task: Task, session: AsyncSession):
+    """ORM запрос на удаление задачи"""
+
     stmt = delete(Task).where(Task.id == task.id)
     await session.execute(stmt)
     await session.commit()

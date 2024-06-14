@@ -8,6 +8,8 @@ from src.tasks.service import get_important_tasks
 
 
 async def get_important_tasks_and_employees(session: AsyncSession):
+    """ORM запрос на получение сотрудников, которые могут взять важные задачи"""
+
     important_tasks = await get_important_tasks(session)
     least_busy_employee = await get_least_busy_employee(session)
     employees_and_tasks = []

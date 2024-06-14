@@ -11,12 +11,16 @@ from src.tasks.models import StatusEnum, Task
 
 
 async def get_all_employees(session: AsyncSession):
+    """ORM запрос на получение всех сотрудников"""
+
     employees = await session.scalars(select(Employee))
     return employees
 
 
 async def get_employee_by_id(employee_id: int,
                              session: AsyncSession):
+    """ORM запрос на получение сотрудника по id"""
+
     employee = await session.get(Employee, employee_id)
     return employee
 
@@ -24,6 +28,8 @@ async def get_employee_by_id(employee_id: int,
 async def add_employee(employee: EmployeeAddSchema,
                        user: User,
                        session: AsyncSession):
+    """ORM запрос на добавление сотрудника"""
+
     existing_employee = await session.scalars(
         select(Employee).where(Employee.user_id == user.id)
     )
@@ -49,6 +55,8 @@ async def add_employee(employee: EmployeeAddSchema,
 async def update_employee(employee: Employee,
                           update_data: EmployeeUpdateSchema,
                           session: AsyncSession):
+    """ORM запрос на обновление сотрудника"""
+
     update_dict = update_data.model_dump(exclude_unset=True)
     try:
         result = await session.scalars(
@@ -68,12 +76,19 @@ async def update_employee(employee: Employee,
 
 async def delete_employee(employee: Employee,
                           session: AsyncSession):
+    """ORM запрос на удаление сотрудника"""
+
     stmt = delete(Employee).where(Employee.id == employee.id)
     await session.execute(stmt)
     await session.commit()
 
 
 async def get_busy_employees(session: AsyncSession):
+    """
+    ORM запрос на получение занятых сотрудников
+    (список сотрудников и их задачи, отсортированный по количеству активных задач)
+    """
+
     active_tasks = aliased(Task)
     query = (
         select(Employee, func.count(Employee.tasks).label('active_task_count'))
@@ -89,6 +104,8 @@ async def get_busy_employees(session: AsyncSession):
 
 
 async def get_least_busy_employee(session: AsyncSession):
+    """ORM запрос на получение наименее занятого сотрудника"""
+
     active_tasks = aliased(Task)
     query = (
         select(Employee, func.count(active_tasks.id).label('active_task_count'))
@@ -105,6 +122,8 @@ async def get_least_busy_employee(session: AsyncSession):
 
 async def get_employee_for_parent_task(parent_task_id: int,
                                        session: AsyncSession):
+    """ORM запрос на получение сотрудника, у которого в работе родительская задача"""
+
     query = (
         select(Employee)
         .join(Task, Task.employee_id == Employee.id)
