@@ -1,8 +1,9 @@
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.employees.service import get_least_busy_employee, get_employee_for_parent_task
-from src.tasks.models import Task, StatusEnum
+from src.employees.service import (get_employee_for_parent_task,
+                                   get_least_busy_employee)
+from src.tasks.models import StatusEnum, Task
 from src.tasks.service import get_important_tasks
 
 

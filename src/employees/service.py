@@ -1,14 +1,13 @@
+from sqlalchemy import delete, desc, func, insert, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, joinedload
 
 from src.auth.models import User
-from sqlalchemy import insert, select, update, delete, func, desc
-
 from src.employees.exceptions import EmployeeAlreadyExists
 from src.employees.models import Employee
 from src.employees.schemas import EmployeeAddSchema, EmployeeUpdateSchema
-from src.tasks.models import Task, StatusEnum
+from src.tasks.models import StatusEnum, Task
 
 
 async def get_all_employees(session: AsyncSession):

@@ -1,9 +1,9 @@
 import enum
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
-from sqlalchemy import Integer, String, ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_utc import UtcDateTime, utcnow
 
 from src.database import Base

@@ -1,5 +1,3 @@
-from typing import Mapping
-
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,10 +5,12 @@ from src.auth.models import User
 from src.database import get_async_session
 from src.dependencies import current_user
 from src.employees import service
-from src.employees.dependencies import valid_employee_id, authorized_user
+from src.employees.dependencies import authorized_user, valid_employee_id
 from src.employees.models import Employee
-from src.employees.schemas import EmployeeSchema, EmployeeNotFoundSchema, EmployeeAlreadyExistsSchema, \
-    EmployeeAddSchema, EmployeeUpdateSchema
+from src.employees.schemas import (EmployeeAddSchema,
+                                   EmployeeAlreadyExistsSchema,
+                                   EmployeeNotFoundSchema, EmployeeSchema,
+                                   EmployeeUpdateSchema)
 from src.schemas import EmployeeTasksSchema
 
 router = APIRouter(

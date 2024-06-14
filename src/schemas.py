@@ -1,4 +1,4 @@
-from src.employees.schemas import EmployeeSchema, EmployeeNameSchema
+from src.employees.schemas import EmployeeNameSchema, EmployeeSchema
 from src.tasks.schemas import TaskSchema
 
 

@@ -1,16 +1,11 @@
 from fastapi import HTTPException
-from sqlalchemy import insert, select, update, delete
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
-from src.employees.dependencies import valid_employee_id
-from src.employees.exceptions import EmployeeNotFound
 from src.employees.service import get_employee_by_id
-from src.tasks.dependencies import valid_task_id
-from src.tasks.exceptions import TaskNotFound
-from src.tasks.models import Task, StatusEnum
-from src.tasks.schemas import TaskUpdateSchema, TaskAddSchema
+from src.tasks.models import StatusEnum, Task
+from src.tasks.schemas import TaskAddSchema, TaskUpdateSchema
 
 
 async def get_all_tasks(session: AsyncSession):

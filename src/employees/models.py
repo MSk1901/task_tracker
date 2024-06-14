@@ -1,9 +1,9 @@
 from datetime import date
-from typing import Optional, List
+from typing import List, Optional
 
 from fastapi_users_db_sqlalchemy import UUID_ID
-from sqlalchemy import Integer, String, ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database import Base
 

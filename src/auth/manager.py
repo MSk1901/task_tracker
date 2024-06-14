@@ -7,8 +7,8 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.config import USER_MANAGER_SECRET
-from src.database import get_async_session
 from src.auth.models import User
+from src.database import get_async_session
 
 SECRET = USER_MANAGER_SECRET
 

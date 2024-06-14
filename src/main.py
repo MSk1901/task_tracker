@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 
 from src.auth.auth import auth_backend
-from src.auth.schemas import UserRead, UserCreate
+from src.auth.schemas import UserCreate, UserRead
 from src.dependencies import fastapi_users
-
 from src.employees.router import router as router_employees
 from src.tasks.router import router as router_tasks
 

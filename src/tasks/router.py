@@ -1,5 +1,3 @@
-from typing import Mapping
-
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,7 +8,8 @@ from src.service import get_important_tasks_and_employees
 from src.tasks import service
 from src.tasks.dependencies import valid_task_id
 from src.tasks.models import Task
-from src.tasks.schemas import TaskSchema, TaskNotFoundSchema, TaskAddSchema, TaskUpdateSchema
+from src.tasks.schemas import (TaskAddSchema, TaskNotFoundSchema, TaskSchema,
+                               TaskUpdateSchema)
 
 router = APIRouter(
     prefix='/tasks',
