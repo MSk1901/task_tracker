@@ -6,4 +6,3 @@ load_dotenv()
 
 JWT_SECRET = os.getenv('JWT_SECRET')
 USER_MANAGER_SECRET = os.getenv('USER_MANAGER_SECRET')
-

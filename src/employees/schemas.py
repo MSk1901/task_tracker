@@ -1,9 +1,11 @@
 import uuid
 from datetime import date, timedelta
+
 from pydantic import BaseModel, Field, field_validator
 
 
-class SEmployeeAdd(BaseModel):
+class EmployeeAddSchema(BaseModel):
+    """Схема создания сотрудника"""
     first_name: str = Field(max_length=50)
     last_name: str = Field(max_length=50)
     fathers_name: str | None = Field(max_length=50, default=None)
@@ -13,6 +15,7 @@ class SEmployeeAdd(BaseModel):
 
     @field_validator('dob')
     def validate_dob(cls, v):
+        """Валидатор даты рождения"""
         if v >= date.today():
             raise ValueError("Date of birth must be in the past")
         elif date.today() - v > timedelta(days=365 * 100):
@@ -20,26 +23,30 @@ class SEmployeeAdd(BaseModel):
         return v
 
 
-class SEmployee(SEmployeeAdd):
+class EmployeeSchema(EmployeeAddSchema):
+    """Схема чтения сотрудника"""
     id: int
     user_id: uuid.UUID
 
 
-class SEmployeeUpdate(SEmployeeAdd):
+class EmployeeUpdateSchema(EmployeeAddSchema):
+    """Схема обновления сотрудника"""
     first_name: str | None = Field(max_length=50, default=None)
     last_name: str | None = Field(max_length=50, default=None)
     dob: date | None = None
     position: str | None = Field(max_length=100, default=None)
 
 
-class SEmployeeName(BaseModel):
+class EmployeeNameSchema(BaseModel):
+    """Схема ФИО сотрудника"""
     first_name: str = Field(max_length=50)
     last_name: str = Field(max_length=50)
     fathers_name: str | None = Field(max_length=50, default=None)
 
 
-class SEmployeeNotFound(BaseModel):
-    class Config:
+class EmployeeNotFoundSchema(BaseModel):
+    """Схема ошибки EmployeeNotFound"""
+    class ConfigDict:
         json_schema_extra = {
             'example':
                 {
@@ -48,8 +55,9 @@ class SEmployeeNotFound(BaseModel):
         }
 
 
-class SEmployeeAlreadyExists(BaseModel):
-    class Config:
+class EmployeeAlreadyExistsSchema(BaseModel):
+    """Схема ошибки EmployeeAlreadyExists"""
+    class ConfigDict:
         json_schema_extra = {
             'example':
                 {

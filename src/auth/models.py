@@ -7,4 +7,5 @@ from src.database import Base
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    employee_data: Mapped[Optional["EmployeeOrm"]] = relationship(back_populates="user_data")
+    """ORM модель пользователя"""
+    employee_data: Mapped[Optional["Employee"]] = relationship(back_populates="user_data")

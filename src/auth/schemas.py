@@ -4,11 +4,13 @@ from fastapi_users import schemas
 
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
+    """Схема для чтения пользователя"""
     pass
 
 
 class UserCreate(schemas.BaseUserCreate):
-    class Config:
+    """Схема для создания пользователя"""
+    class ConfigDict:
         json_schema_extra = {'example': {
             'email': 'user e-mail',
             'password': 'user password'
@@ -17,4 +19,5 @@ class UserCreate(schemas.BaseUserCreate):
 
 
 class UserUpdate(schemas.BaseUserUpdate):
+    """Схема для обновления пользователя"""
     pass

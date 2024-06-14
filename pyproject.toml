@@ -14,7 +14,18 @@ psycopg2-binary = "^2.9.9"
 python-dotenv = "^1.0.1"
 asyncpg = "^0.29.0"
 fastapi-users = {extras = ["sqlalchemy"], version = "^13.0.0"}
+sqlalchemy-utc = "^0.14.0"
 
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^5.0.0"
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.7"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    ".", "src",
+]
+asyncio_mode = "auto"
 
 [build-system]
 requires = ["poetry-core"]

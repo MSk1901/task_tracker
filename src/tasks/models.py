@@ -1,12 +1,12 @@
 import enum
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
-from sqlalchemy import Integer, String, ForeignKey, func
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy_utc import UtcDateTime, utcnow
 
 from src.database import Base
-from src.employees.models import EmployeeOrm
 
 
 class StatusEnum(enum.Enum):
@@ -15,7 +15,8 @@ class StatusEnum(enum.Enum):
     finished = 'завершена'
 
 
-class TaskOrm(Base):
+class Task(Base):
+    """ORM модель задачи"""
     __tablename__ = 'task'
 
     id = mapped_column(Integer, primary_key=True)
@@ -23,11 +24,11 @@ class TaskOrm(Base):
     description: Mapped[Optional[str]]
     status: Mapped[StatusEnum] = mapped_column(default=StatusEnum.created)
     employee_id: Mapped[Optional[int]] = mapped_column(ForeignKey("employee.id"))
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(onupdate=func.now())
-    deadline: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, server_default=utcnow())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(UtcDateTime, onupdate=utcnow())
+    deadline: Mapped[datetime] = mapped_column(UtcDateTime)
     parent_task_id: Mapped[Optional[int]] = mapped_column(ForeignKey('task.id'))
-    parent_task: Mapped[Optional['TaskOrm']] = relationship("TaskOrm", remote_side=[id],
-                                                            back_populates="sub_tasks")
-    sub_tasks: Mapped[List['TaskOrm']] = relationship("TaskOrm", back_populates="parent_task",
-                                                      cascade="all, delete-orphan")
+    parent_task: Mapped[Optional['Task']] = relationship("Task", remote_side=[id],
+                                                         back_populates="sub_tasks")
+    sub_tasks: Mapped[List['Task']] = relationship("Task", back_populates="parent_task",
+                                                   cascade="all, delete-orphan")
