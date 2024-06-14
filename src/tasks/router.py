@@ -1,12 +1,15 @@
 from typing import Mapping
 
 from fastapi import APIRouter, Depends, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.database import get_async_session
 from src.dependencies import current_user
-from src.employees.service import get_important_tasks_and_employees
 from src.schemas import ImportantTaskSchema
+from src.service import get_important_tasks_and_employees
 from src.tasks import service
 from src.tasks.dependencies import valid_task_id
+from src.tasks.models import Task
 from src.tasks.schemas import TaskSchema, TaskNotFoundSchema, TaskAddSchema, TaskUpdateSchema
 
 router = APIRouter(
@@ -19,8 +22,8 @@ router = APIRouter(
     '',
     response_model=list[TaskSchema]
 )
-async def get_all_tasks():
-    tasks = await service.get_all_tasks()
+async def get_all_tasks(session: AsyncSession = Depends(get_async_session)):
+    tasks = await service.get_all_tasks(session)
     return tasks
 
 
@@ -28,8 +31,8 @@ async def get_all_tasks():
     '/important',
     response_model=list[ImportantTaskSchema]
 )
-async def get_important_tasks():
-    result = await get_important_tasks_and_employees()
+async def get_important_tasks(session: AsyncSession = Depends(get_async_session)):
+    result = await get_important_tasks_and_employees(session)
     return result
 
 
@@ -43,7 +46,7 @@ async def get_important_tasks():
         }
     }
 )
-async def get_task(task: Mapping = Depends(valid_task_id)):
+async def get_task(task: Task = Depends(valid_task_id)):
     return task
 
 
@@ -53,8 +56,9 @@ async def get_task(task: Mapping = Depends(valid_task_id)):
     status_code=status.HTTP_201_CREATED,
 )
 async def add_task(task: TaskAddSchema,
-                   user=Depends(current_user)):
-    result = await service.add_task(task)
+                   user=Depends(current_user),
+                   session: AsyncSession = Depends(get_async_session)):
+    result = await service.add_task(task, session)
     return result
 
 
@@ -69,9 +73,10 @@ async def add_task(task: TaskAddSchema,
     }
 )
 async def update_task(update_data: TaskUpdateSchema,
-                      task: Mapping = Depends(valid_task_id),
+                      task: Task = Depends(valid_task_id),
+                      session: AsyncSession = Depends(get_async_session),
                       user=Depends(current_user)):
-    result = await service.update_task(task, update_data)
+    result = await service.update_task(task, update_data, session)
     return result
 
 
@@ -85,6 +90,7 @@ async def update_task(update_data: TaskUpdateSchema,
         }
     }
 )
-async def delete_task(task: Mapping = Depends(valid_task_id),
+async def delete_task(task: Task = Depends(valid_task_id),
+                      session: AsyncSession = Depends(get_async_session),
                       user=Depends(current_user)):
-    await service.delete_task(task)
+    await service.delete_task(task, session)
