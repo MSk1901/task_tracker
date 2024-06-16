@@ -6,11 +6,12 @@ from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.config import DB_HOST, DB_PASS, DB_PORT, DB_USER, TEST_DB_NAME
+from src.config import settings
 from src.database import Base, get_async_session
 from src.main import app
 
-TEST_DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{TEST_DB_NAME}"
+TEST_DATABASE_URL = (f"postgresql+asyncpg://{settings.db_user}:{settings.db_pass}"
+                     f"@{settings.db_host}:{settings.db_port}/{settings.test_db_name}")
 
 test_engine = create_async_engine(TEST_DATABASE_URL, poolclass=NullPool)
 async_session_maker = sessionmaker(

@@ -1,8 +1,10 @@
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from dotenv import load_dotenv
 
-load_dotenv()
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra='ignore')
+    jwt_secret: str
+    user_manager_secret: str
 
-JWT_SECRET = os.getenv('JWT_SECRET')
-USER_MANAGER_SECRET = os.getenv('USER_MANAGER_SECRET')
+
+settings = Settings()

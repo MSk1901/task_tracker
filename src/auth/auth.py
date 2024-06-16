@@ -1,9 +1,9 @@
 from fastapi_users.authentication import (AuthenticationBackend,
                                           CookieTransport, JWTStrategy)
 
-from src.auth.config import JWT_SECRET
+from src.auth.config import settings
 
-SECRET = JWT_SECRET
+SECRET = settings.jwt_secret
 
 cookie_transport = CookieTransport(cookie_max_age=3600, cookie_name='token')
 

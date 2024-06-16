@@ -6,11 +6,11 @@ from fastapi_users import BaseUserManager, UUIDIDMixin
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.config import USER_MANAGER_SECRET
+from src.auth.config import settings
 from src.auth.models import User
 from src.database import get_async_session
 
-SECRET = USER_MANAGER_SECRET
+SECRET = settings.user_manager_secret
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
