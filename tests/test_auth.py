@@ -16,6 +16,8 @@ async def test_login(ac):
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
+
     response = await ac.post('auth/login', data=data, headers=headers)
+
     assert response.status_code == 204
     assert response.cookies is not None
