@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.tasks.models import StatusEnum
 
@@ -23,12 +23,6 @@ class TaskAddSchema(BaseModel):
             raise ValueError('deadline must be an aware datetime with timezone info')
         return v
 
-    class ConfigDict:
-        json_encoders = {
-            datetime: lambda dt: dt.isoformat()
-        }
-        use_enum_values = True
-
 
 class TaskSchema(TaskAddSchema):
     """Схема чтения задачи"""
@@ -36,9 +30,6 @@ class TaskSchema(TaskAddSchema):
     status: StatusEnum
     created_at: datetime
     updated_at: datetime | None
-
-    class ConfigDict:
-        from_attributes = True
 
 
 class TaskUpdateSchema(TaskAddSchema):
@@ -51,10 +42,11 @@ class TaskUpdateSchema(TaskAddSchema):
 
 class TaskNotFoundSchema(BaseModel):
     """Схема ошибки TaskNotFound"""
-    class ConfigDict:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             'example':
                 {
                     "detail": "Task with this id not found"
                 }
         }
+    )

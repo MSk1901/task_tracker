@@ -1,7 +1,7 @@
 import uuid
 from datetime import date, timedelta
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class EmployeeAddSchema(BaseModel):
@@ -46,21 +46,23 @@ class EmployeeNameSchema(BaseModel):
 
 class EmployeeNotFoundSchema(BaseModel):
     """Схема ошибки EmployeeNotFound"""
-    class ConfigDict:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             'example':
                 {
                     "detail": "Employee with this id not found"
                 }
         }
+    )
 
 
 class EmployeeAlreadyExistsSchema(BaseModel):
     """Схема ошибки EmployeeAlreadyExists"""
-    class ConfigDict:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             'example':
                 {
                     "detail": "Employee already exists"
                 }
         }
+    )

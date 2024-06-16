@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi_users import schemas
+from pydantic import ConfigDict
 
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
@@ -10,12 +11,14 @@ class UserRead(schemas.BaseUser[uuid.UUID]):
 
 class UserCreate(schemas.BaseUserCreate):
     """Схема для создания пользователя"""
-    class ConfigDict:
-        json_schema_extra = {'example': {
-            'email': 'user e-mail',
-            'password': 'user password'
+
+    model_config = ConfigDict(
+        json_schema_extra={'example': {
+            'email': 'user@email.com',
+            'password': 'password'
         }
         }
+    )
 
 
 class UserUpdate(schemas.BaseUserUpdate):
